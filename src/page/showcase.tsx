@@ -4,7 +4,7 @@ const ShowCase = () => {
   return (
     <Layout>
       <h1 className="font-bold text-3xl">MFE Showcase</h1>
-      <p>This is the showcase of mfe-remote-1</p>
+      <p className="text-gray-500">This is the showcase of mfe-remote-1</p>
     </Layout>
   );
 };

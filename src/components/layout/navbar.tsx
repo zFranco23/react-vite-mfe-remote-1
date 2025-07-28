@@ -1,6 +1,6 @@
 const Navbar = () => {
   return (
-    <div className="flex justify-between bg-gray-200 p-2">
+    <div className="flex justify-between bg-gray-200 p-6">
       <h1>
         Navbar for <span className="font-bold text-blue-500">mfe-remote-1</span>
       </h1>
