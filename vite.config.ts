@@ -4,6 +4,8 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { federation } from "@module-federation/vite";
 
+import packageJson from "./package.json";
+
 const APP_NAME = "mfe-remote-1";
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -28,7 +30,17 @@ export default defineConfig(({ mode }) => {
         name: APP_NAME,
         filename: "remoteEntry.js",
         exposes: {
-          "./ShowCase": "./src/page/showcase",
+          "./Showcase": "./src/page/showcase",
+        },
+        shared: {
+          react: {
+            singleton: true,
+            version: packageJson.dependencies.react,
+          },
+          "react-dom": {
+            singleton: true,
+            version: packageJson.dependencies["react-dom"],
+          },
         },
       }),
     ],
