@@ -1,7 +1,7 @@
-import ShowCase from "./page/showcase";
+import AppRouter from "./router";
 
 const App = () => {
-  return <ShowCase />;
+  return <AppRouter />;
 };
 
 export default App;

@@ -30,16 +30,23 @@ export default defineConfig(({ mode }) => {
         name: APP_NAME,
         filename: "remoteEntry.js",
         exposes: {
-          "./Showcase": "./src/page/showcase",
+          "./showcase": "./src/page/showcase",
+          // "./ZustandExample": "./src/page/zustand-example",
+          "./home": "./src/page/home",
+          "./not-found": "./src/page/not-found",
         },
         shared: {
           react: {
             singleton: true,
-            version: packageJson.dependencies.react,
+            requiredVersion: packageJson.dependencies.react,
           },
           "react-dom": {
             singleton: true,
-            version: packageJson.dependencies["react-dom"],
+            requiredVersion: packageJson.dependencies["react-dom"],
+          },
+          "react-router": {
+            singleton: true,
+            requiredVersion: packageJson.dependencies["react-router"],
           },
         },
       }),
