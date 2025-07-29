@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build:prepare": "npm run build && cp _headers dist/_headers",
+    "build:prepare": "npm run build && cp _headers dist/_headers && cp _redirects dist/_redirects",
     "lint": "eslint .",
     "preview": "vite preview"
   },
