@@ -13,7 +13,6 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
   const port = Number(env.VITE_PORT) || 3001;
 
-  console.log("env", env);
   return {
     base: env.VITE_BASE_URL,
     server: {
