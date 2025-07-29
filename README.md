@@ -1,69 +1,83 @@
-# React + TypeScript + Vite
+# Remote App: mfe-remote-1 (React + Vite + Module Federation)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a **remote microfrontend** (`MFE_1`) built with:
 
-Currently, two official plugins are available:
+- React 18+
+- Vite
+- @module-federation/enhanced
+- Tailwind CSS v4 (optional)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+It exposes components to a host app using Module Federation Runtime via `remoteEntry.js`.
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Install dependencies:
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Run the development server:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm dev
 ```
+
+By default, the app will be available at:
+
+```
+http://localhost:3001/remoteEntry.js
+```
+
+## Exposed Modules
+
+Defined in `vite.config.ts` using `federation()`:
+
+```ts
+exposes: {
+  './ShowCase': './src/page/showcase.tsx',
+  './NotFound': './src/pages/NotFound.tsx',
+
+}
+```
+
+Usage from host:
+
+```ts
+import Button from "MFE_1/Button";
+```
+
+## Production Build
+
+Build the remote:
+
+```bash
+pnpm build
+```
+
+This will generate `remoteEntry.js` in the `dist/` folder, which must be deployed and publicly accessible by the host.
+
+## Netlify Deployment
+
+Ensure the `remoteEntry.js` is served from the root.
+
+Add a `_redirects` file (in `public/` or output root like `dist/`):
+
+```
+/*    /index.html   200
+```
+
+Optional: if the host is strict with CORS, add a `_headers` file:
+
+```
+/remoteEntry.js
+  Access-Control-Allow-Origin: *
+```
+
+## TODOs
+
+- [ ] Review what components should be exposed publicly.
+- [ ] Tailwind CSS v4 is JIT-only and hard to coordinate across MFEs. Consider moving shared styles to a base library.
+- [ ] Define types for each exposed module to help the host (e.g., `declare module 'MFE_1/Button'`).
+- [ ] Consider extracting shared logic or UI elements into a common package (`@myorg/ui`).
+- [ ] Set version constraints on shared libraries like `react`, `react-dom`, etc., to avoid runtime mismatches.
