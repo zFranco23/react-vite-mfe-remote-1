@@ -27,7 +27,6 @@ export default defineConfig(({ mode }) => {
       target: "esnext",
       minify: false,
       outDir: "dist",
-      cssCodeSplit: false,
     },
     plugins: [
       react(),
@@ -56,10 +55,6 @@ export default defineConfig(({ mode }) => {
             singleton: true,
             requiredVersion: packageJson.dependencies["react-router"],
           },
-          // tailwindcss: {
-          //   singleton: true,
-          //   requiredVersion: packageJson.dependencies["tailwindcss"],
-          // },
         },
       }),
     ],
