@@ -1,6 +1,7 @@
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
-
+// import prefixer from "postcss-prefix-selector";
+// import autoprefixer from "autoprefixer";
 import tailwindcss from "@tailwindcss/vite";
 import { federation } from "@module-federation/vite";
 
@@ -11,16 +12,22 @@ const APP_NAME = "mfe-remote-1";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
   const port = Number(env.VITE_PORT) || 3001;
+
+  console.log("env", env);
   return {
     base: env.VITE_BASE_URL,
     server: {
       port,
     },
+    preview: {
+      port,
+    },
+
     build: {
-      minify: false,
       target: "esnext",
-      emptyOutDir: true,
+      minify: false,
       outDir: "dist",
+      cssCodeSplit: false,
     },
     plugins: [
       react(),
@@ -34,6 +41,7 @@ export default defineConfig(({ mode }) => {
           // "./ZustandExample": "./src/page/zustand-example",
           "./home": "./src/page/home",
           "./not-found": "./src/page/not-found",
+          "./styles.css": "./src/index.css", //
         },
         shared: {
           react: {
@@ -48,8 +56,22 @@ export default defineConfig(({ mode }) => {
             singleton: true,
             requiredVersion: packageJson.dependencies["react-router"],
           },
+          // tailwindcss: {
+          //   singleton: true,
+          //   requiredVersion: packageJson.dependencies["tailwindcss"],
+          // },
         },
       }),
     ],
+    // css: {
+    //   postcss: {
+    //     plugins: [
+    //       prefixer({
+    //         prefix: "#mfe-remote-1",
+    //       }),
+    //       autoprefixer({}),
+    //     ],
+    //   },
+    // },
   };
 });
